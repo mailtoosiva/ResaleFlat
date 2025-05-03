@@ -20,7 +20,7 @@ try:
         # "../data/Resale_Flat_Prices_Based_on_Approval_Date_2000_Feb2012.csv",
         # "../data/Resale_Flat_Prices_Based_on_Registration_Date_From_Jan_2015_to_Dec_2016.csv",
         # "../data/Resale_Flat_Prices_Based_on_Registration_Date_From_Mar_2012_to_Dec_2014.csv",
-        "data/Resale_flat_prices_based_on_registration_date_from_Jan-2017_onwards.csv"
+        "Resale_flat_prices_based_on_registration_date_from_Jan-2017_onwards.csv"
     ]
     
     df = pd.concat([pd.read_csv(file) for file in csv_files], ignore_index=True)
