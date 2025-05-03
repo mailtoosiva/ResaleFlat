@@ -1,8 +1,24 @@
 import streamlit as st
+import os
+import joblib
+import requests
+
 from predictor import load_model, make_prediction
 
-# Load trained model
-model = load_model()
+
+def download_model():
+    url = "https://yourfilelink.com/model.pkl"
+    os.makedirs("models", exist_ok=True)
+    response = requests.get(url)
+    with open("models/resale_price_model.pkl", "wb") as f:
+        f.write(response.content)
+
+# Check if model exists, otherwise download it
+if not os.path.exists("models/resale_price_model.pkl"):
+    download_model()
+
+# Load the model
+model = joblib.load("models/resale_price_model.pkl")
 
 st.title("HDB Resale Price Predictor")
 st.markdown("Estimate the resale price of an HDB flat in Singapore")
