@@ -2,38 +2,28 @@ import os
 import joblib
 import requests
 
-MODEL_DIR = "models"
-MODEL_FILE = "resale_price_model.pkl"
-MODEL_PATH = os.path.join(MODEL_DIR, MODEL_FILE)
+MODEL_URL = "https://drive.google.com/uc?export=download&id=1GPkUTYfLiRt8iJcoT-jOiKlzBHL_uj4T"
+MODEL_PATH = "models/resale_price_model.pkl"
 
 def download_model():
-    url = "https://drive.usercontent.google.com/download?id=1GPkUTYfLiRt8iJcoT-jOiKlzBHL_uj4T&export=download"
-    os.makedirs(MODEL_DIR, exist_ok=True)
-    print("📦 Downloading model...")
-    response = requests.get(url, stream=True)
-    if response.status_code == 200:
-        with open(MODEL_PATH, "wb") as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                if chunk:
-                    f.write(chunk)
-        print("✅ Model downloaded.")
+    os.makedirs("models", exist_ok=True)
+    if not os.path.exists(MODEL_PATH):
+        print("⬇️ Downloading model...")
+        response = requests.get(MODEL_URL)
+        if response.status_code == 200:
+            with open(MODEL_PATH, "wb") as f:
+                f.write(response.content)
+            print("✅ Model downloaded.")
+        else:
+            print(f"❌ Failed to download model. Status: {response.status_code}")
     else:
-        raise Exception(f"❌ Failed to download model. Status code: {response.status_code}")
+        print("✅ Model file already exists. Skipping download.")
 
 def load_model():
-    if not os.path.exists(MODEL_PATH):
-        download_model()
-    print(f"📂 Loading model from: {MODEL_PATH}")
+    download_model()
     try:
+        print(f"Loading model from: {MODEL_PATH}")
         return joblib.load(MODEL_PATH)
     except Exception as e:
-        print(f"❌ Failed to load the model: {e}")
+        print(f"❌ Failed to load model: {e}")
         return None
-
-
-# def load_model():
-#     return joblib.load("../models/resale_price_model.pkl")
-
-# def make_prediction(model, user_input):
-#     df = pd.DataFrame([user_input])
-#     return model.predict(df)[0]
