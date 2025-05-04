@@ -4,10 +4,10 @@ from predictor import load_model, make_prediction
 st.title("🏠 HDB Resale Price Predictor")
 st.markdown("Estimate the resale price of an HDB flat in Singapore")
 
-st.write("🔄 Loading model...")
+
 try:
     model = load_model()
-    st.success("✅ Model loaded successfully!")
+
 except Exception as e:
     st.error(f"❌ Error loading model: {e}")
     st.stop()
