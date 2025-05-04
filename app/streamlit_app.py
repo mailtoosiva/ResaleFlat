@@ -1,11 +1,21 @@
 import streamlit as st
 from predictor import load_model, make_prediction
 
-# Load trained model
-model = load_model()
+st.set_page_config(page_title="HDB Resale Price Predictor", layout="centered")
 
-st.title("HDB Resale Price Predictor")
-st.markdown("Estimate the resale price of an HDB flat in Singapore")
+# Logging for debugging
+st.write("App started")
+
+# Load trained model
+try:
+    model = load_model()
+    st.write("Model loaded successfully")
+except Exception as e:
+    st.error(f"Error loading model: {e}")
+    st.stop()
+
+st.title("🏠 HDB Resale Price Predictor")
+st.markdown("Use this app to estimate the resale price of an HDB flat in Singapore.")
 
 # Input fields
 user_input = {
@@ -18,5 +28,9 @@ user_input = {
 }
 
 if st.button("Predict Price"):
-    predicted_price = make_prediction(model, user_input)
-    st.success(f"Estimated Resale Price: SGD {predicted_price:,.2f}")
+    try:
+        predicted_price = make_prediction(model, user_input)
+        st.success(f"Estimated Resale Price: SGD {predicted_price:,.2f}")
+        st.write("Prediction complete")
+    except Exception as e:
+        st.error(f"Prediction failed: {e}")
