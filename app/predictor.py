@@ -2,6 +2,7 @@ from huggingface_hub import hf_hub_download
 import joblib
 import os
 import logging
+import pandas as pd  # ✅ Added missing import
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -25,13 +26,15 @@ def load_model():
         logger.error(f"Error loading model: {e}")
         raise
 
-
-
 def make_prediction(model, user_input):
-    df = pd.DataFrame([user_input])
-    return model.predict(df)[0]
-
-    
+    try:
+        df = pd.DataFrame([user_input])
+        prediction = model.predict(df)[0]
+        logger.info(f"Prediction successful: {prediction}")
+        return prediction
+    except Exception as e:
+        logger.error(f"Error during prediction: {e}")
+        raise
 
 
 # import os
