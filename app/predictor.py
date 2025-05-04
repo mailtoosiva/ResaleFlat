@@ -1,21 +1,30 @@
-import os
-import joblib
 from huggingface_hub import hf_hub_download
+import joblib
+import os
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
 
 def load_model():
+    logger.info("Loading model...")
     try:
-        print("🔍 Starting model download from Hugging Face...")
+        # Use Hugging Face Hub to download the model
         model_path = hf_hub_download(
             repo_id="mailtoosiva/resale-price-predictor",
             filename="models/resale_price_model.pkl"
         )
-        print(f"✅ Model downloaded to: {model_path}")
+        logger.info(f"Model downloaded to: {model_path}")
+        
+        # Load the model
         model = joblib.load(model_path)
-        print("✅ Model loaded successfully.")
+        logger.info("Model loaded successfully.")
         return model
     except Exception as e:
-        print(f"❌ Failed to load model: {e}")
+        logger.error(f"Error loading model: {e}")
         raise
+
 
 
 def make_prediction(model, user_input):
